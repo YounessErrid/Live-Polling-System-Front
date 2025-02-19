@@ -5,22 +5,25 @@ import './App.css'
 import Login from './views/login'
 import { Route, Routes } from 'react-router'
 import Singup from './views/Singup'
-import { Home } from './views/Home'
+import Dashboard from './views/Dashboard'
 import ProtectedRoute from '../routes/ProtectedRoute'
+import Home from './views/Home'
+import Navbar from './components/Navbar'
 
 function App() {
 
   return (
-    <Routes>
-
-      <Route element={<ProtectedRoute/>}>
-        <Route path='/' element={<Home/>}></Route>
-      </Route>
-
-      <Route path="/Login" element={<Login/>}/>
-      <Route path="/Singup" element={<Singup/>}/> 
-
-    </Routes>
+    <>
+      <Navbar />
+      <Routes>
+        <Route element={<ProtectedRoute />}>
+          <Route path="/Dashboard" element={<Dashboard />} />
+        </Route>
+        <Route path='/' element={<Home />}></Route>
+        <Route path="/Login" element={<Login />} />
+        <Route path="/Singup" element={<Singup />} />
+      </Routes>
+    </>
   )
 }
 
