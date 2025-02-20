@@ -1,6 +1,5 @@
 import React from 'react'
 import Poll from '../components/poll';
-import Navbar from '../components/Navbar';
 
 export const Dashboard = () => {
   return (
