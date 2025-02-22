@@ -1,7 +1,37 @@
 import React from 'react'
-import {Link} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
+import api from '../utils/axiosInstance';
+import { useState } from "react";
+import {ACCESS_TOKEN, REFRESH_TOKEN} from '../utils/constants'
 
 export const Login = () => {
+  const loginRoute = '/api/token/';
+  const [email, setEmail] = useState(''); 
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+const handleSubmit = async (e) => {
+  setLoading(true);
+  e.preventDefault();
+  // call your login API here
+  try {
+    const response = await api.post(loginRoute, {username:email,password:password});
+    localStorage.setItem(ACCESS_TOKEN, response.data.access);
+    localStorage.setItem(REFRESH_TOKEN, response.data.refresh);
+    navigate('/dashboard');
+
+  } catch (error) {
+    alert(error.message);
+    console.error(error);
+    
+  }
+  finally {
+    setLoading(false);
+  }
+};
+
+
   return (
     <>
     <div className='flex justify-center'>
@@ -12,16 +42,18 @@ export const Login = () => {
           </h2>
         </div>
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form action="#" method="POST" className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label htmlFor="email" className="block text-left text-sm/6 font-medium text-gray-900">
                 Email address
               </label>
               <div className="mt-2">
                 <input
-                  id="email"
-                  name="email"
-                  type="email"
+                  id="username"
+                  name="username"
+                  type="text"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   required
                   autoComplete="email"
                   className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
@@ -45,6 +77,8 @@ export const Login = () => {
                   id="password"
                   name="password"
                   type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   required
                   autoComplete="current-password"
                   className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
