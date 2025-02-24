@@ -98,7 +98,7 @@ const handleSubmit = async (e) => {
 
           <p className="mt-10 text-center text-sm/6 text-gray-500">
             Not a member?{' '}
-            <Link to='/Singup' className="font-semibold text-indigo-600 hover:text-indigo-500">
+            <Link to='/Register' className="font-semibold text-indigo-600 hover:text-indigo-500">
               Sing up
             </Link>
           </p>
