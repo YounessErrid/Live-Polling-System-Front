@@ -1,13 +1,14 @@
 import './App.css'
-import Login from './views/login'
 import { Route, Routes, Navigate } from 'react-router-dom'
-import Singup from './views/Singup'
-import Dashboard from './views/Dashboard'
 import ProtectedRoute from '../routes/ProtectedRoute'
-import Home from './views/Home'
 import Navbar from './components/Navbar'
+import Home from './views/Home'
+import Login from './views/login'
 import Logout from './views/Logout'
+import Register from './views/Register'
 import NotFound from './views/NotFound'
+import Dashboard from './views/Dashboard'
+
 // function Logout() {
 //   localStorage.removeItem('access_token');
 //   localStorage.removeItem('refresh_token');
@@ -31,7 +32,7 @@ function App() {
         <Route path='/' element={<Home />}></Route>
         <Route path="/Login" element={<Login />} />
         <Route path="/Logout" element={<Logout />} />
-        <Route path="/Singup" element={<Singup />} />
+        <Route path="/Register" element={<Register />} />
         <Route path='*' element={<NotFound/>} />
       </Routes>
     </>
