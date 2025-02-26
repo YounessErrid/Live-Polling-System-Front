@@ -16,7 +16,7 @@ const handleSubmit = async (e) => {
   e.preventDefault();
   // call your login API here
   try {
-    const response = await api.post(loginRoute, {username:email,password:password});
+    const response = await api.post(loginRoute, {email:email,password:password});
     localStorage.setItem(ACCESS_TOKEN, response.data.access);
     localStorage.setItem(REFRESH_TOKEN, response.data.refresh);
     navigate('/dashboard');
@@ -49,8 +49,8 @@ const handleSubmit = async (e) => {
               </label>
               <div className="mt-2">
                 <input
-                  id="username"
-                  name="username"
+                  id="email"
+                  name="email"
                   type="text"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
