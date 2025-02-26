@@ -4,7 +4,7 @@ import api from '../utils/axiosInstance';
 
 export const Register = () => {
   const [fullname, setFullname] = useState('');
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -17,7 +17,7 @@ export const Register = () => {
       // Call the registration API here
       const response = await api.post('/api/user/register/', {
         fullname: fullname,
-        username: username,
+        email: email,
         password: password,
       });
 
@@ -63,18 +63,18 @@ export const Register = () => {
               </div>
 
               <div>
-                <label htmlFor="username" className="block text-sm font-medium text-gray-900">
-                  username address
+                <label htmlFor="email" className="block text-sm font-medium text-gray-900">
+                  email address
                 </label>
                 <div className="mt-2">
                   <input
-                    id="username"
-                    name="username"
-                    type="username"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
+                    id="email"
+                    name="email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     required
-                    autoComplete="username"
+                    autoComplete="email"
                     className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 sm:text-sm"
                   />
                 </div>
