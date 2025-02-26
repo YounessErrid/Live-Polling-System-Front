@@ -26,7 +26,17 @@ export const Register = () => {
         navigate('/login');
       }
     } catch (error) {
-      alert('Registration failed! ' + error.message);
+      let errorMessage = "Registration failed!";
+
+      // Check if error.response exists and has data
+      if (error.response && error.response.data) {
+        if (error.response.data.email)
+          errorMessage += " " + error.response.data.email;
+      } else {
+        errorMessage += " " + error.message;
+      }
+
+      alert(errorMessage);
       console.error(error);
     } finally {
       setLoading(false);
@@ -41,6 +51,7 @@ export const Register = () => {
             <h2 className="text-center text-2xl font-bold tracking-tight text-gray-900">
               Create your account
             </h2>
+            
           </div>
 
           <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm text-left">

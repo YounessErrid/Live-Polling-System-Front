@@ -6,7 +6,7 @@ import {REFRESH_TOKEN, ACCESS_TOKEN} from '../src/utils/constants'
 import {jwtDecode} from 'jwt-decode';
 
 
-const ProtectedRoute = ({ children }) => {
+const ProtectedRoute = () => {
   const [isAuthorized, setIsAuthorized] = useState(null);
 
   useEffect(() => {
@@ -50,7 +50,7 @@ const ProtectedRoute = ({ children }) => {
     return <div>Loading...</div>;
   }
 
-  return isAuthorized ? children : <Navigate to="/Login" />;
+  return isAuthorized ? <Outlet /> : <Navigate to="/Login" />;
 };
 
 export default ProtectedRoute;

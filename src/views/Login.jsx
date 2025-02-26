@@ -51,7 +51,7 @@ const handleSubmit = async (e) => {
                 <input
                   id="email"
                   name="email"
-                  type="text"
+                  type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
