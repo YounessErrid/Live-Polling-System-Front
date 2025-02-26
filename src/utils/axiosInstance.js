@@ -8,16 +8,16 @@ const api = axios.create({
 });
 
 // Add a request interceptor
-
 api.interceptors.request.use((config) => {
-  // Add token to headers if it exists in local storage
-  const token = localStorage.getItem(ACCESS_TOKEN);
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+  // Skip adding the Authorization header for the registration endpoint
+  if (!config.url.includes('/api/user/register/')) {
+    const token = localStorage.getItem(ACCESS_TOKEN);
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
   }
   return config;
-},
-(error) => {
+}, (error) => {
   return Promise.reject(error);
 });
 
