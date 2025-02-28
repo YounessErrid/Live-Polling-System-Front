@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchPolls } from "../store/PollsSlice";
+import { addPoll, fetchPolls } from "../store/PollsSlice";
 
 export const DataTable = () => {
   const dispatch = useDispatch();
@@ -9,7 +9,20 @@ export const DataTable = () => {
   const error = useSelector((state) => state.polls.error);
 
   useEffect(() => {
-    dispatch(fetchPolls());    
+    dispatch(fetchPolls());   
+
+    /// WebSocket connection
+    const socket = new WebSocket("ws://127.0.0.1:8000/ws/polls/");
+
+    socket.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      if (data.type === "new_poll") {
+        dispatch(addPoll(data.poll));  // Dispatch the addPoll action when a new poll is received
+      }
+    };
+
+    return () => socket.close();
+
   }, [dispatch]);
 
   return (
