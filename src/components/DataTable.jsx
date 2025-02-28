@@ -1,0 +1,77 @@
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchPolls } from "../store/PollsSlice";
+
+export const DataTable = () => {
+  const dispatch = useDispatch();
+  const polls = useSelector((state) => state.polls.polls); // Get polls from Redux store
+  const loading = useSelector((state) => state.polls.loading);
+  const error = useSelector((state) => state.polls.error);
+
+  useEffect(() => {
+    dispatch(fetchPolls());    
+  }, [dispatch]);
+
+  return (
+    <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+      {loading && <p>Loading...</p>}
+      {error && <p className="text-red-500">Error: {error}</p>}
+
+      {!loading && !error && polls?.length > 0 ? (
+        <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+          <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+              <th scope="col" className="p-4">
+                <div className="flex items-center">
+                  <input
+                    id="checkbox-all-search"
+                    type="checkbox"
+                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500"
+                  />
+                  <label htmlFor="checkbox-all-search" className="sr-only">
+                    checkbox
+                  </label>
+                </div>
+              </th>
+              <th scope="col" className="px-6 py-3">Poll Question</th>
+              <th scope="col" className="px-6 py-3">Status</th>
+              <th scope="col" className="px-6 py-3">Created At</th>
+              <th scope="col" className="px-6 py-3">Updated At</th>
+              <th scope="col" className="px-6 py-3">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {polls.map((poll) => (
+              <tr key={poll.id} className="bg-white border-b hover:bg-gray-50">
+                <td className="w-4 p-4">
+                  <div className="flex items-center">
+                    <input
+                      id={`checkbox-${poll.id}`}
+                      type="checkbox"
+                      className="w-4 h-4 text-blue-600 border-gray-300 rounded-sm focus:ring-blue-500"
+                    />
+                    <label htmlFor={`checkbox-${poll.id}`} className="sr-only">
+                      checkbox
+                    </label>
+                  </div>
+                </td>
+                <td className="px-6 py-4">{poll.question}</td>
+                <td className="px-6 py-4">{poll.status ? "Active" : "Inactive"}</td>
+                <td className="px-6 py-4">{new Date(poll.created_at).toLocaleString()}</td>
+                <td className="px-6 py-4">{new Date(poll.updated_at).toLocaleString()}</td>
+                <td className="px-6 py-4">
+                  <a href="#" className="text-blue-600 hover:underline">Edit</a>
+                  <a href="#" className="text-red-600 hover:underline ms-3">Remove</a>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      ) : (
+        !loading && !error && <p>No polls available.</p>
+      )}
+    </div>
+  );
+};
+
+export default DataTable;
