@@ -2,35 +2,39 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addPoll, fetchPolls } from "../store/PollsSlice";
 
-export const DataTable = () => {
+export const DataTable = ({ search }) => {
   const dispatch = useDispatch();
   const polls = useSelector((state) => state.polls.polls); // Get polls from Redux store
   const loading = useSelector((state) => state.polls.loading);
   const error = useSelector((state) => state.polls.error);
 
   useEffect(() => {
-    dispatch(fetchPolls());   
+    dispatch(fetchPolls());
 
-    /// WebSocket connection
+    // WebSocket connection
     const socket = new WebSocket("ws://127.0.0.1:8000/ws/polls/");
 
     socket.onmessage = (event) => {
       const data = JSON.parse(event.data);
       if (data.type === "new_poll") {
-        dispatch(addPoll(data.poll));  // Dispatch the addPoll action when a new poll is received
+        dispatch(addPoll(data.poll)); // Dispatch the addPoll action when a new poll is received
       }
     };
 
     return () => socket.close();
-
   }, [dispatch]);
+
+  // Filter polls based on the search term
+  const filteredPolls = polls.filter((poll) =>
+    poll.question.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
       {loading && <p>Loading...</p>}
       {error && <p className="text-red-500">Error: {error}</p>}
 
-      {!loading && !error && polls?.length > 0 ? (
+      {!loading && !error && filteredPolls.length > 0 ? (
         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
@@ -54,7 +58,7 @@ export const DataTable = () => {
             </tr>
           </thead>
           <tbody>
-            {polls.map((poll) => (
+            {filteredPolls.map((poll) => (
               <tr key={poll.id} className="bg-white border-b hover:bg-gray-50">
                 <td className="w-4 p-4">
                   <div className="flex items-center">
