@@ -1,7 +1,6 @@
 import './App.css'
 import { Route, Routes, Navigate } from 'react-router-dom'
 import ProtectedRoute from '../routes/ProtectedRoute'
-import Navbar from './components/Navbar'
 import Home from './views/Home'
 import Login from './views/Login'
 import Logout from './views/Logout'
@@ -24,7 +23,6 @@ function App() {
 
   return (
     <>
-      <Navbar />
       <Routes>
         <Route element={<ProtectedRoute />}>
           <Route path="/dashboard" element={<Dashboard />} />

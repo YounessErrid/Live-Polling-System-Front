@@ -1,18 +1,8 @@
 import { useState } from 'react'
-import { Dialog, DialogPanel } from '@headlessui/react'
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
-import Navbar from '../components/Navbar'
 import { Link } from 'react-router-dom'
 
-const navigation = [
-  { name: 'Product', href: '#' },
-  { name: 'Features', href: '#' },
-  { name: 'Marketplace', href: '#' },
-  { name: 'Company', href: '#' },
-]
   
 export const Home = () => {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   return (
     <>
     <div className="bg-white">
