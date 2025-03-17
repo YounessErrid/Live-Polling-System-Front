@@ -1,7 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import CreatePullForm from "./CreatePullForm";
 
 export const Navbar = () => {
+  const handleCreatePull = () => {
+    // const modal = document.getElementById("crud-modal");
+    // modal.classList.remove("hidden");
+  };
+
   return (
     <>
       <nav className="bg-white border-gray-200 dark:bg-gray-900">
@@ -112,7 +118,7 @@ export const Navbar = () => {
           >
             <ul className="ml-8 flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
               <li>
-              <button type="button" className="cursor-pointer text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ">
+              <button onClick={handleCreatePull} data-modal-target="crud-modal" data-modal-toggle="crud-modal" type="button" className="cursor-pointer text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ">
               + Create Poll</button>
 
               </li>
@@ -123,6 +129,8 @@ export const Navbar = () => {
           </div>
         </div>
       </nav>
+      <CreatePullForm />
+      
     </>
   );
 };
