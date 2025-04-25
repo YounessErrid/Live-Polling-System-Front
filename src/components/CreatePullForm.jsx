@@ -1,7 +1,13 @@
-import React, { useState } from "react";
-
+import React, { useState, useEffect } from "react";
+import { addPoll, resetPollStatus } from "../store/pollsSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { pollSchema } from "../utils/schemas/pollSchema";
 const CreatePullForm = () => {
+  const dispatch = useDispatch();
+  const [question, setQuestion] = useState("");
+  const { loading, error, status } = useSelector((state) => state.polls);
   const [choices, setChoices] = useState([]);
+  const [formErrors, setFormErrors] = useState({});
 
   const handleAddChoice = (e) => {
     e.preventDefault();
@@ -19,10 +25,45 @@ const CreatePullForm = () => {
     setChoices(updatedChoices);
   };
   const handleResetForm = (e) => {
-    e.target.reset();
+    e.preventDefault();
+    setQuestion("");
     setChoices([]);
-    // Reset form fields here
-  }
+    setFormErrors({});
+  };
+  const handleCreatePoll = async (e) => {
+    e.preventDefault();
+    console.log("Creating poll...");
+    // Get form data
+    const pollData = { question, choices };
+    const result = pollSchema.safeParse(pollData);
+    console.log(pollData);
+
+    if (!result.success) {
+      // Collect errors from Zod
+      const fieldErrors = {};
+      result.error.errors.forEach((err) => {
+        fieldErrors[err.path[0]] = err.message;
+      });
+      console.log("validating poll...");
+
+      setFormErrors(fieldErrors);
+      return;
+    }
+    setFormErrors({});
+    dispatch(addPoll(pollData));
+    console.log("saving poll...");
+
+    handleResetForm(e);
+  };
+  // Inside your component
+  useEffect(() => {
+    if (status === "success") {
+      const timer = setTimeout(() => {
+        dispatch(resetPollStatus());
+      }, 2000); // Wait 2 sec before resetting
+      return () => clearTimeout(timer);
+    }
+  }, [status, dispatch]);
 
   return (
     <div>
@@ -62,23 +103,28 @@ const CreatePullForm = () => {
                 <span className="sr-only">Close modal</span>
               </button>
             </div>
-            <form className="p-4 md:p-5">
+            <form onSubmit={handleCreatePoll} className="p-4 md:p-5">
               <div className="grid gap-4 mb-4 grid-cols-2">
                 <div className="col-span-2">
                   <label
-                    htmlFor="name"
+                    htmlFor="question"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
                     Poll Question
                   </label>
                   <input
                     type="text"
-                    name="name"
-                    id="name"
+                    name="question"
+                    value={question}
+                    onChange={(e) => setQuestion(e.target.value)}
+                    id="question"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                     placeholder="Type poll question"
                     required
                   />
+                  {formErrors.question && (
+                    <p className="text-red-500">{formErrors.question}</p>
+                  )}
                 </div>
 
                 <div className="col-span-2">
@@ -148,12 +194,16 @@ const CreatePullForm = () => {
                       </button>
                     </div>
                   ))}
+                  {formErrors.choices && (
+                    <p className="text-red-500">{formErrors.choices}</p>
+                  )}
                 </div>
               </div>
 
               <div className="flex items-center justify-end">
                 <button
                   type="submit"
+                  disabled={loading}
                   className="text-white inline-flex items-center bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
                 >
                   <svg
@@ -173,12 +223,22 @@ const CreatePullForm = () => {
                 <button
                   data-modal-hide="default-modal"
                   data-modal-toggle="crud-modal"
+                  type="button"
                   onClick={handleResetForm}
                   class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-gray-200 rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
                 >
                   Cancel
                 </button>
               </div>
+              {loading && (
+                <p className="text-sm text-blue-500">Creating poll...</p>
+              )}
+              {error && <p className="text-sm text-red-500">Error: {error}</p>}
+              {status === "success" && (
+                <p className="text-sm text-green-500">
+                  Poll created successfully!
+                </p>
+              )}
             </form>
           </div>
         </div>

@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addPoll, fetchPolls } from "../store/PollsSlice";
-
+import { fetchPolls, addPoll, deletePoll } from "../store/pollsSlice"; // Import actions
 export const DataTable = ({ search }) => {
   const dispatch = useDispatch();
   const polls = useSelector((state) => state.polls.polls); // Get polls from Redux store
@@ -78,7 +77,7 @@ export const DataTable = ({ search }) => {
                 <td className="px-6 py-4">{new Date(poll.updated_at).toLocaleString()}</td>
                 <td className="px-6 py-4">
                   <a href="#" className="text-blue-600 hover:underline">Edit</a>
-                  <a href="#" className="text-red-600 hover:underline ms-3">Remove</a>
+                  <a onClick={() => dispatch(deletePoll(poll.id))} href="#" className="text-red-600 hover:underline ms-3">Remove</a>
                 </td>
               </tr>
             ))}
