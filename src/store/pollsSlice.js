@@ -49,6 +49,18 @@ export const deletePoll = createAsyncThunk(
     }
   }
 );
+// Async thunk for updating a poll
+export const updatePoll = createAsyncThunk(
+  "polls/updatePoll",
+  async ({ id, poll }, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.put(`/api/polls/${id}`, poll);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
 
 // Initial state of the polls slice
 const initialState = {
@@ -123,6 +135,25 @@ export const pollsSlice = createSlice({
         state.status = null;
         state.error = action.error.message;
       })
+      // Update poll
+      .addCase(updatePoll.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+        state.status = null;
+      })
+      .addCase(updatePoll.fulfilled, (state, action) => {
+        state.loading = false;
+        const index = state.polls.findIndex((poll) => poll.id === action.payload.id);
+        if (index !== -1) {
+          state.polls[index] = action.payload;
+        }
+        state.status = "success";
+      })
+      .addCase(updatePoll.rejected, (state, action) => {
+        state.loading = false;
+        state.status = null;
+        state.error = action.error.message;
+      });
   },
 });
 
