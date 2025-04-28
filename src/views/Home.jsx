@@ -16,12 +16,12 @@ export const Home = () => {
                 Create and participate in live polls with instant results! Engage your audience with real-time voting, see percentage breakdowns, and track vote counts dynamically. Perfect for events, meetings, and social interactions. Start polling now! 🚀
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6">
-              <a
-                href="#"
+              <Link
+                to='/Register'
                 className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
                 Get started
-              </a>
+              </Link>
               <Link to="/Login" className="text-sm/6 font-semibold text-gray-900">
                 Login <span aria-hidden="true">→</span>
               </Link>
